@@ -2,27 +2,26 @@ using System.Collections.Generic;
 using System.CommandLine;
 using System.Linq;
 
-namespace DotNet.ProjectGraph.Tool.Projectgraph
+namespace DotNet.ProjectGraph.Tool.Projectgraph;
+
+public class ProjectgraphCommandBuilder : IProjectgraphCommandBuilder
 {
-    public class ProjectgraphCommandBuilder : IProjectgraphCommandBuilder
+    private readonly IEnumerable<IProjectgraphSubCommandBuilder> _projectgraphSubCommandBuilders;
+
+    public ProjectgraphCommandBuilder(IEnumerable<IProjectgraphSubCommandBuilder> projectgraphSubCommandBuilders)
     {
-        private readonly IEnumerable<IProjectgraphSubCommandBuilder> _projectgraphSubCommandBuilders;
+        _projectgraphSubCommandBuilders = projectgraphSubCommandBuilders;
+    }
 
-        public ProjectgraphCommandBuilder(IEnumerable<IProjectgraphSubCommandBuilder> projectgraphSubCommandBuilders)
+    public RootCommand Build()
+    {
+        var rootCommand = new RootCommand
         {
-            _projectgraphSubCommandBuilders = projectgraphSubCommandBuilders;
-        }
+            Name = "projectgraph",
+            Description = @"Run 'projectgraph [command] --help' in order to get specific information."
+        };
 
-        public RootCommand Build()
-        {
-            var rootCommand = new RootCommand
-            {
-                Name = "projectgraph",
-                Description = @"Run 'projectgraph [command] --help' in order to get specific information."
-            };
-
-            _projectgraphSubCommandBuilders.ToList().ForEach(builder => rootCommand.AddCommand(builder.Build()));
-            return rootCommand;
-        }
+        _projectgraphSubCommandBuilders.ToList().ForEach(builder => rootCommand.AddCommand(builder.Build()));
+        return rootCommand;
     }
 }

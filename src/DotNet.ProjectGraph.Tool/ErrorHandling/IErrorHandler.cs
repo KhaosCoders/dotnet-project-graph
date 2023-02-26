@@ -2,10 +2,9 @@ using System;
 using System.CommandLine.Invocation;
 using System.Threading.Tasks;
 
-namespace DotNet.ProjectGraph.Tool.ErrorHandling
+namespace DotNet.ProjectGraph.Tool.ErrorHandling;
+
+public interface IErrorHandler
 {
-    public interface IErrorHandler
-    {
-        Task HandleErrors(InvocationContext context, Func<InvocationContext, Task> next);
-    }
+    Task HandleErrors(InvocationContext context, Func<InvocationContext, Task> next);
 }

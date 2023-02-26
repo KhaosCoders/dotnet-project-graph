@@ -3,49 +3,48 @@ using System.CommandLine.Invocation;
 using System.Threading.Tasks;
 using DotNet.ProjectGraph.Tool.Services;
 
-namespace DotNet.ProjectGraph.Tool.ErrorHandling
+namespace DotNet.ProjectGraph.Tool.ErrorHandling;
+
+public class ErrorHandler : IErrorHandler
 {
-    public class ErrorHandler : IErrorHandler
+    private readonly IConsoleService _consoleService;
+
+    public ErrorHandler(IConsoleService consoleService)
     {
-        private readonly IConsoleService _consoleService;
+        _consoleService = consoleService;
+    }
 
-        public ErrorHandler(IConsoleService consoleService)
+    public async Task HandleErrors(InvocationContext context, Func<InvocationContext, Task> next)
+    {
+        try
         {
-            _consoleService = consoleService;
+            await next(context);
         }
-
-        public async Task HandleErrors(InvocationContext context, Func<InvocationContext, Task> next)
+        catch (Exception e)
         {
-            try
+            var ex = FindMostSuitableException(e);
+
+            if (ex is ProjectgraphException)
             {
-                await next(context);
+                _consoleService.WriteError(ex.Message);
             }
-            catch (Exception e)
+            else
             {
-                var ex = FindMostSuitableException(e);
-
-                if (ex is ProjectgraphException)
-                {
-                    _consoleService.WriteError(ex.Message);
-                }
-                else
-                {
-                    _consoleService.WriteError("An unhandled Error occurred:");
-                    _consoleService.WriteLine();
-                    _consoleService.WriteError(ex.ToString());
-                }
-
-                context.ResultCode = 1;
+                _consoleService.WriteError("An unhandled Error occurred:");
+                _consoleService.WriteLine();
+                _consoleService.WriteError(ex.ToString());
             }
+
+            context.ResultCode = 1;
         }
+    }
 
-        private static Exception FindMostSuitableException(Exception exception)
-        {
-            if (exception is ProjectgraphException) return exception;
+    private static Exception FindMostSuitableException(Exception exception)
+    {
+        if (exception is ProjectgraphException) return exception;
 
-            if (exception.InnerException != null) return FindMostSuitableException(exception.InnerException);
+        if (exception.InnerException != null) return FindMostSuitableException(exception.InnerException);
 
-            return exception;
-        }
+        return exception;
     }
 }

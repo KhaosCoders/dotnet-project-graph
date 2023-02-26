@@ -1,14 +1,13 @@
-namespace DotNet.ProjectGraph.Tool.Services
-{
-    public interface IConsoleService
-    {
-        string ReadLine();
+namespace DotNet.ProjectGraph.Tool.Services;
 
-        void WriteInput(string value);
-        void WriteSample(string value);
-        void WriteError(string value);
-        void WriteSuccess(string value);
-        void WriteInfo(string value);
-        void WriteLine();
-    }
+public interface IConsoleService
+{
+    string ReadLine();
+
+    void WriteInput(string value);
+    void WriteSample(string value);
+    void WriteError(string value);
+    void WriteSuccess(string value);
+    void WriteInfo(string value);
+    void WriteLine();
 }

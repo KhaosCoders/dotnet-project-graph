@@ -1,9 +1,8 @@
 using System.CommandLine;
 
-namespace DotNet.ProjectGraph.Tool.Projectgraph
+namespace DotNet.ProjectGraph.Tool.Projectgraph;
+
+public interface IProjectgraphCommandBuilder
 {
-    public interface IProjectgraphCommandBuilder
-    {
-        RootCommand Build();
-    }
+    RootCommand Build();
 }
