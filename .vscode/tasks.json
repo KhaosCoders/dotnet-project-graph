@@ -1,0 +1,77 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "test",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "pack",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "pack",
+                "${workspaceFolder}/src/DotNet.ProjectGraph.Tool/",
+                "-o",
+                "nupkg"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "install",
+            "type": "shell",
+            "windows": {
+                "command": "powershell",
+                "args": [
+                    "-File",
+                    "\"${workspaceFolder}\\scripts\\install.ps1\""
+                ]
+            },
+            "linux": {
+                "command": "${workspaceFolder}/scripts/install.sh"
+            },
+            "osx": {
+                "command": "${workspaceFolder}/scripts/install.sh"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "uninstall",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "tool",
+                "uninstall",
+                "-g",
+                "DotNet.ProjectGraph.Tool"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "pack and install",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "pack",
+                "install"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}
