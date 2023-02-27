@@ -1,13 +1,7 @@
-using System;
-using System.IO;
-using Microsoft.Extensions.DependencyInjection;
+using DotNet.ProjectGraph.Tool.ErrorHandling;
 using DotNet.ProjectGraph.Tool.Projectgraph;
 using DotNet.ProjectGraph.Tool.Services;
-using DotNet.ProjectGraph.Tool.ErrorHandling;
-using DotNet.ProjectGraph.Tool.Projectgraph.Build;
-using DotNet.ProjectGraph.Tool.Projectgraph.Build.Arguments;
-using DotNet.ProjectGraph.Tool.Projectgraph.Build.Options;
-using DotNet.ProjectGraph.Tool.Projectgraph.Build.Service;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DotNet.ProjectGraph.Tool;
 
@@ -17,6 +11,7 @@ internal class Startup
     {
         services.AddSingleton<IErrorHandler, ErrorHandler>();
         services.AddSingleton<IConsoleService, ConsoleService>();
+        services.AddSingleton<IMSBuildService, MSBuildService>();
         services.AddSingleton<IProjectgraphCommandBuilder, ProjectgraphCommandBuilder>();
 
         ConfigureBuild(services);
@@ -24,9 +19,9 @@ internal class Startup
 
     private static void ConfigureBuild(IServiceCollection services)
     {
-        services.AddSingleton<DotNet.ProjectGraph.Tool.Projectgraph.Build.Arguments.IBuildArgumentBuilder, DotNet.ProjectGraph.Tool.Projectgraph.Build.Arguments.BuildArgumentBuilder>();
-        services.AddSingleton<DotNet.ProjectGraph.Tool.Projectgraph.Build.Options.IBuildOptionsBuilder, DotNet.ProjectGraph.Tool.Projectgraph.Build.Options.BuildOptionsBuilder>();
-        services.AddSingleton<DotNet.ProjectGraph.Tool.Projectgraph.IProjectgraphSubCommandBuilder, DotNet.ProjectGraph.Tool.Projectgraph.Build.BuildCommandBuilder>();
-        services.AddSingleton<DotNet.ProjectGraph.Tool.Projectgraph.Build.Service.IBuildService, DotNet.ProjectGraph.Tool.Projectgraph.Build.Service.BuildService>();
+        services.AddSingleton<Projectgraph.Build.Arguments.IBuildArgumentBuilder, Projectgraph.Build.Arguments.BuildArgumentBuilder>();
+        services.AddSingleton<Projectgraph.Build.Options.IBuildOptionsBuilder, Projectgraph.Build.Options.BuildOptionsBuilder>();
+        services.AddSingleton<IProjectgraphSubCommandBuilder, Projectgraph.Build.BuildCommandBuilder>();
+        services.AddSingleton<Projectgraph.Build.Service.IBuildService, Projectgraph.Build.Service.BuildService>();
     }
 }

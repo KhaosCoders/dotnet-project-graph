@@ -1,12 +1,12 @@
+using DotNet.ProjectGraph.Tool.ErrorHandling;
+using DotNet.ProjectGraph.Tool.Projectgraph;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using DotNet.ProjectGraph.Tool.ErrorHandling;
-using DotNet.ProjectGraph.Tool.Projectgraph;
 
 namespace DotNet.ProjectGraph.Tool.App;
 
@@ -15,14 +15,15 @@ public class App
     public App(IServiceProvider serviceProvider)
     {
         ServiceProvider = serviceProvider;
+
     }
 
     public IServiceProvider ServiceProvider { get; }
 
     public Task<int> RunAsync(string[] args)
     {
-        var rootCommand = ServiceProvider.GetService<IProjectgraphCommandBuilder>().Build();
-        var errorHandler = ServiceProvider.GetService<IErrorHandler>();
+        var rootCommand = ServiceProvider.GetRequiredService<IProjectgraphCommandBuilder>().Build();
+        var errorHandler = ServiceProvider.GetRequiredService<IErrorHandler>();
 
         var commandLineBuilder = new CommandLineBuilder(rootCommand);
 

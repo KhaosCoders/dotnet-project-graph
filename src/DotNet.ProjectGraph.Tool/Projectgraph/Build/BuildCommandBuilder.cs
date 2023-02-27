@@ -1,12 +1,9 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-using System.CommandLine;
-using System.CommandLine.Invocation;
 using DotNet.ProjectGraph.Tool.Projectgraph.Build.Arguments;
 using DotNet.ProjectGraph.Tool.Projectgraph.Build.Options;
 using DotNet.ProjectGraph.Tool.Projectgraph.Build.Service;
+using System.CommandLine;
+using System.CommandLine.Invocation;
+using System.Linq;
 
 namespace DotNet.ProjectGraph.Tool.Projectgraph.Build;
 
@@ -26,9 +23,9 @@ internal class BuildCommandBuilder : IProjectgraphSubCommandBuilder
     public Command Build()
     {
         var command = new Command("build", "Builds the graph of dependant projects");
-        _optionsBuilder.Build().ToList().ForEach(option => command.AddOption(option));
+        _optionsBuilder.Build().ToList().ForEach(command.AddOption);
         command.AddArgument(_argumentBuilder.Build());
-        command.Handler = CommandHandler.Create<object, bool>((projectfile, output) => _buildService.HandleAsync(new BuildParameters(projectfile, output)));
+        command.Handler = CommandHandler.Create<string?, bool>((projectfile, output) => _buildService.HandleAsync(new BuildParameters(projectfile, output)));
         return command;
     }
 }
