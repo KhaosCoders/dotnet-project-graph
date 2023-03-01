@@ -2,7 +2,7 @@
   "profiles": {
     "DotNet.ProjectGraph.Tool": {
       "commandName": "Project",
-      "commandLineArgs": "build \"E:\\FE_Parser\\SWSConverter\\SWSApps\\SWSLib\\SWSLib.csproj\" --output E:\\Data\\graph.dgml"
+      "commandLineArgs": "build \"E:\\FE_Parser\\SWSConverter\\SWSApps\\SWSLib\\SWSLib.csproj\" --output \"E:\\Data\\graph.dgml\"  --order"
     }
   }
 }

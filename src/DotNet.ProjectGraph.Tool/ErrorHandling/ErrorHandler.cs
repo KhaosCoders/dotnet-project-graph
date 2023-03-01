@@ -35,7 +35,7 @@ public class ErrorHandler : IErrorHandler
                 _consoleService.WriteError(ex.ToString());
             }
 
-            context.ResultCode = 1;
+            context.ExitCode = 1;
         }
     }
 

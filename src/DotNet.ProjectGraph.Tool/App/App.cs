@@ -5,6 +5,7 @@ using System;
 using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
+using System.CommandLine.Parsing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,7 +16,6 @@ public class App
     public App(IServiceProvider serviceProvider)
     {
         ServiceProvider = serviceProvider;
-
     }
 
     public IServiceProvider ServiceProvider { get; }
@@ -27,7 +27,7 @@ public class App
 
         var commandLineBuilder = new CommandLineBuilder(rootCommand);
 
-        commandLineBuilder.UseMiddleware(errorHandler.HandleErrors);
+        commandLineBuilder.AddMiddleware(errorHandler.HandleErrors);
         commandLineBuilder.UseDefaults();
 
         var parser = commandLineBuilder.Build();
