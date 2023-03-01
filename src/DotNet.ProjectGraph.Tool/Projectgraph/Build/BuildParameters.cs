@@ -2,12 +2,12 @@ namespace DotNet.ProjectGraph.Tool.Projectgraph.Build;
 
 internal class BuildParameters
 {
-    public BuildParameters(string? projectfile, bool output)
+    public BuildParameters(string? projectfile, string? outputfile)
     {
-        Projectfile = projectfile;
-        Output = output;
+        ProjectFile = projectfile;
+        OutputFile = outputfile;
     }
 
-    public string? Projectfile { get; }
-    public bool Output { get; }
+    public string? ProjectFile { get; }
+    public string? OutputFile { get; }
 }

@@ -3,6 +3,7 @@ using DotNet.ProjectGraph.Tool.Projectgraph.Build.Options;
 using DotNet.ProjectGraph.Tool.Projectgraph.Build.Service;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.IO;
 using System.Linq;
 
 namespace DotNet.ProjectGraph.Tool.Projectgraph.Build;
@@ -11,21 +12,22 @@ internal class BuildCommandBuilder : IProjectgraphSubCommandBuilder
 {
     private readonly IBuildService _buildService;
     private readonly IBuildOptionsBuilder _optionsBuilder;
-    private readonly IBuildArgumentBuilder _argumentBuilder;
+    private readonly IBuildArgumentsBuilder _argumentsBuilder;
 
-    public BuildCommandBuilder(IBuildService buildService, IBuildOptionsBuilder optionsBuilder, IBuildArgumentBuilder argumentBuilder)
+    public BuildCommandBuilder(IBuildService buildService, IBuildOptionsBuilder optionsBuilder, IBuildArgumentsBuilder argumentsBuilder)
     {
         _buildService = buildService;
         _optionsBuilder = optionsBuilder;
-        _argumentBuilder = argumentBuilder;
+        _argumentsBuilder = argumentsBuilder;
     }
 
     public Command Build()
     {
         var command = new Command("build", "Builds the graph of dependant projects");
         _optionsBuilder.Build().ToList().ForEach(command.AddOption);
-        command.AddArgument(_argumentBuilder.Build());
-        command.Handler = CommandHandler.Create<string?, bool>((projectfile, output) => _buildService.HandleAsync(new BuildParameters(projectfile, output)));
+        _argumentsBuilder.Build().ToList().ForEach(command.AddArgument);
+        command.Handler = CommandHandler.Create<string?, FileInfo>((projectfile, outputfile) =>
+            _buildService.HandleAsync(new BuildParameters(projectfile, outputfile?.FullName)));
         return command;
     }
 }

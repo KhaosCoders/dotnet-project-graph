@@ -12,6 +12,9 @@ internal class Startup
         services.AddSingleton<IErrorHandler, ErrorHandler>();
         services.AddSingleton<IConsoleService, ConsoleService>();
         services.AddSingleton<IMSBuildService, MSBuildService>();
+        services.AddSingleton<IDgmlService, DgmlService>();
+        services.AddSingleton<IOutputService, OutputService>();
+        services.AddSingleton<IProjectReferenceResolver, ProjectReferenceResolver>();
         services.AddSingleton<IProjectgraphCommandBuilder, ProjectgraphCommandBuilder>();
 
         ConfigureBuild(services);
@@ -19,7 +22,7 @@ internal class Startup
 
     private static void ConfigureBuild(IServiceCollection services)
     {
-        services.AddSingleton<Projectgraph.Build.Arguments.IBuildArgumentBuilder, Projectgraph.Build.Arguments.BuildArgumentBuilder>();
+        services.AddSingleton<Projectgraph.Build.Arguments.IBuildArgumentsBuilder, Projectgraph.Build.Arguments.BuildArgumentsBuilder>();
         services.AddSingleton<Projectgraph.Build.Options.IBuildOptionsBuilder, Projectgraph.Build.Options.BuildOptionsBuilder>();
         services.AddSingleton<IProjectgraphSubCommandBuilder, Projectgraph.Build.BuildCommandBuilder>();
         services.AddSingleton<Projectgraph.Build.Service.IBuildService, Projectgraph.Build.Service.BuildService>();

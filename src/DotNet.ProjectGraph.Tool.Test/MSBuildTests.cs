@@ -6,11 +6,11 @@ namespace DotNet.ProjectGraph.Tool.Test;
 [TestClass]
 public class MsBuildTests
 {
-    private MSBuildService msBuildService;
+    private IMSBuildService msBuildService;
 
     public MsBuildTests()
     {
-        msBuildService = new();
+        msBuildService = new MSBuildService();
     }
 
     [TestMethod]
