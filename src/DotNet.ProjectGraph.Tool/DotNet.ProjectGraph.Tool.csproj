@@ -6,10 +6,11 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <PackAsTool>true</PackAsTool>
-    <ToolCommandName>dotnet-projectgrapth</ToolCommandName>
+    <ToolCommandName>dotnet-projectgraph</ToolCommandName>
 	<PackageId>Project.Grapth.Tool</PackageId>
 	<PackageDescription>.NET Tool to generate a dependency graph from *.csproj files.</PackageDescription>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
