@@ -26,31 +26,30 @@ internal class BuildService : IBuildService
 
         if (parameters.OrderProjects)
         {
-            WriteProjectOrder(graph, parameters.OutputFile);
+            WriteProjectOrder(graph, parameters.OutputFile, parameters.ShowPackages);
         }
         else
         {
-            WriteGraph(graph, parameters.OutputFile);
+            WriteGraph(graph, parameters.OutputFile, parameters.ShowPackages);
         }
 
         return Task.CompletedTask;
     }
 
-    private void WriteProjectOrder(CSProject graph, string? outputFile)
+    private void WriteProjectOrder(CSProject graph, string? outputFile, bool showPackages)
     {
         var order = this.orderService.OrderProjects(graph);
 
+        foreach (var project in order)
+        {
+            project.References.Clear();
+        }
+
+        this.outputService.Output(order, outputFile, showPackages);
     }
 
-    private void WriteGraph(CSProject graph, string? outputFile)
+    private void WriteGraph(CSProject graph, string? outputFile, bool showPackages)
     {
-        if (!string.IsNullOrWhiteSpace(outputFile))
-        {
-            this.outputService.OutputToFile(graph, outputFile);
-        }
-        else
-        {
-            this.outputService.OutputToConsole(graph);
-        }
+        this.outputService.Output(graph, outputFile, showPackages);
     }
 }

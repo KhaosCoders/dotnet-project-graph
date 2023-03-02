@@ -18,7 +18,7 @@ internal class BuildOrderService : IBuildOrderService
 
     private static void VisitProject(CSProject project, HashSet<CSProject> projectOrder)
     {
-        foreach(var reference in GetUnorderedReferences(project, projectOrder))
+        foreach (var reference in GetUnorderedReferences(project, projectOrder))
         {
             VisitProject(reference, projectOrder);
         }

@@ -22,18 +22,21 @@ internal class BuildCommandBuilder : IProjectgraphSubCommandBuilder
 
         var outputOption = new Option<string?>("--output", "Output file (*.json, *.dgml)");
         var orderOption = new Option<bool>("--order", "Order projects by dependency");
+        var nugetOption = new Option<bool>("--packages", "Also show Nuget packages");
 
         var command = new Command("build", "Builds the graph of dependant projects"){
             projectFileArgument,
             outputOption,
-            orderOption
+            orderOption,
+            nugetOption
         };
 
-        command.SetHandler((projectfile, outputfile, orderProjects) =>
-            _buildService.HandleAsync(new BuildParameters(projectfile, outputfile, orderProjects)),
+        command.SetHandler((projectfile, outputfile, orderProjects, showPackages) =>
+            _buildService.HandleAsync(new BuildParameters(projectfile, outputfile, orderProjects, showPackages)),
             projectFileArgument,
             outputOption,
-            orderOption);
+            orderOption,
+            nugetOption);
 
         return command;
     }

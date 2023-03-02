@@ -1,9 +1,9 @@
 ﻿using DotNet.ProjectGraph.Tool.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Text.Json;
 
 namespace DotNet.ProjectGraph.Tool.Services;
 
@@ -18,36 +18,72 @@ internal class OutputService : IOutputService
         this.consoleService = consoleService;
     }
 
-    public void OutputToFile(CSProject project, string outputFile)
+    public void Output(CSProject graph, string? outputFile, bool showPackages) =>
+        Output(
+            WriteToConsole,
+            WriteToJsonFile,
+            WriteGraphToDgmlFile,
+            graph,
+            outputFile,
+            showPackages);
+
+    public void Output(IReadOnlyCollection<CSProject> order, string? outputFile, bool showPackages) =>
+        Output(
+            WriteToConsole,
+            WriteToJsonFile,
+            WriteOrderToDgmlFile,
+            order,
+            outputFile,
+            showPackages);
+
+    private static void Output<T>(
+        Action<T> writeConsole,
+        Action<T, string> writeJsonFile,
+        Action<T, string, bool> writeDgmlFile,
+        T data,
+        string? outputFile,
+        bool showPackages)
     {
-        switch(Path.GetExtension(outputFile).ToLowerInvariant())
+        if (string.IsNullOrWhiteSpace(outputFile))
+        {
+            writeConsole(data);
+            return;
+        }
+
+        switch (Path.GetExtension(outputFile).ToLowerInvariant())
         {
             case ".dgml":
-                WriteDgml(project, outputFile);
+                writeDgmlFile(data, outputFile, showPackages);
                 break;
             case ".json":
-                WriteJson(project, outputFile);
+                writeJsonFile(data, outputFile);
                 break;
             default:
                 throw new NotSupportedException($"Can't output to {Path.GetExtension(outputFile)} file");
         }
     }
 
-    public void OutputToConsole(CSProject project)
+    private void WriteToConsole(object data)
     {
-        string json = JsonConvert.SerializeObject(project);
+        string json = JsonConvert.SerializeObject(data);
         this.consoleService.WriteInfo(json);
     }
 
-    private void WriteDgml(CSProject project, string outputFile)
+    private void WriteGraphToDgmlFile(CSProject project, string outputFile, bool showPackages)
     {
-        string dgml = this.dgmlService.GenerateDgml(project);
+        string dgml = this.dgmlService.GenerateDgmlForGraph(project, showPackages);
         File.WriteAllText(outputFile, dgml, Encoding.UTF8);
     }
 
-    private void WriteJson(CSProject project, string outputFile)
+    private void WriteOrderToDgmlFile(IReadOnlyCollection<CSProject> order, string outputFile, bool showPackages)
     {
-        string json = JsonConvert.SerializeObject(project);
+        string dgml = this.dgmlService.GenerateDgmlForOrder(order, showPackages);
+        File.WriteAllText(outputFile, dgml, Encoding.UTF8);
+    }
+
+    private void WriteToJsonFile(object data, string outputFile)
+    {
+        string json = JsonConvert.SerializeObject(data);
         File.WriteAllText(outputFile, json, Encoding.UTF8);
     }
 }
