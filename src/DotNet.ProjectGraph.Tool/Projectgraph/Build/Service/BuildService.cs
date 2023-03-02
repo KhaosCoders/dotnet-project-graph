@@ -1,3 +1,4 @@
+using DotNet.ProjectGraph.Tool.Models;
 using DotNet.ProjectGraph.Tool.Services;
 using System.Threading.Tasks;
 
@@ -7,25 +8,49 @@ internal class BuildService : IBuildService
 {
     private readonly IOutputService outputService;
     private readonly IDependencyGraphService dependencyTreeService;
+    private readonly IBuildOrderService orderService;
 
-    public BuildService(IOutputService outputService, IDependencyGraphService dependencyTreeService)
+    public BuildService(
+        IOutputService outputService,
+        IDependencyGraphService dependencyTreeService,
+        IBuildOrderService orderService)
     {
         this.outputService = outputService;
         this.dependencyTreeService = dependencyTreeService;
+        this.orderService = orderService;
     }
 
     public Task HandleAsync(BuildParameters parameters)
     {
         var graph = this.dependencyTreeService.BuildGraph(parameters.ProjectFile);
-        if (!string.IsNullOrWhiteSpace(parameters.OutputFile))
+
+        if (parameters.OrderProjects)
         {
-            this.outputService.OutputToFile(graph, parameters.OutputFile);
+            WriteProjectOrder(graph, parameters.OutputFile);
+        }
+        else
+        {
+            WriteGraph(graph, parameters.OutputFile);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private void WriteProjectOrder(CSProject graph, string? outputFile)
+    {
+        var order = this.orderService.OrderProjects(graph);
+
+    }
+
+    private void WriteGraph(CSProject graph, string? outputFile)
+    {
+        if (!string.IsNullOrWhiteSpace(outputFile))
+        {
+            this.outputService.OutputToFile(graph, outputFile);
         }
         else
         {
             this.outputService.OutputToConsole(graph);
         }
-
-        return Task.CompletedTask;
     }
 }

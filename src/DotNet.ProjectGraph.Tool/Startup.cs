@@ -17,6 +17,7 @@ internal class Startup
         services.AddSingleton<IProjectReferenceResolver, ProjectReferenceResolver>();
         services.AddSingleton<IProjectgraphCommandBuilder, ProjectgraphCommandBuilder>();
         services.AddSingleton<IDependencyGraphService, DependencyGraphService>();
+        services.AddSingleton<IBuildOrderService, BuildOrderService>();
 
         ConfigureBuild(services);
     }
