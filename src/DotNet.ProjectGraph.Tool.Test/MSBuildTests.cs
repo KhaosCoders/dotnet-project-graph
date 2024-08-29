@@ -1,5 +1,6 @@
 using DotNet.ProjectGraph.Tool.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.IO;
 
 namespace DotNet.ProjectGraph.Tool.Test;
 
@@ -19,7 +20,7 @@ public class MsBuildTests
         // given
 
         // when
-        var project = msBuildService.ReadProject(@"E:\FE_Parser\SWSConverter\SWSApps\SWSLib\SWSLib.csproj");
+        var project = msBuildService.ReadProject(@"../../../DotNet.ProjectGraph.Tool.Test.csproj");
 
         // then
 
