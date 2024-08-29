@@ -10,7 +10,7 @@
 	<PackageId>Project.Graph.Tool</PackageId>
 	<PackageDescription>.NET Tool to generate a dependency graph from *.csproj files.</PackageDescription>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
-	<Version>1.0.0</Version>
+	<Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

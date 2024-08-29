@@ -28,7 +28,7 @@ Use the `--order` option to recieve an ordered list of the projects by dependenc
 
 * VS Code
 * VS 2019 or higher
-* .NET 7.0 SDK or higher
+* .NET 8.0 SDK or higher
 
 ### Get started
 
