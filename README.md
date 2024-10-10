@@ -2,7 +2,7 @@
 
 ## Install
 
-Make sure you have .NET SDK 7.0 or higher installed on your machine. Then run
+Make sure you have .NET SDK 8.0 or higher installed on your machine. Then run
 
 ```bash
 dotnet tool install -g Project.Graph.Tool
